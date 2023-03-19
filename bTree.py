@@ -16,7 +16,7 @@ class BTree:
 
     # Insert node (吃一個tuple(兩個keys))
     def insert(self, k):
-        root = self.root
+        root = self.root    # 此時root.leaf是True
         # 插入時，如果node的空間滿了，要做分割:
         if len(root.keys) == (2 * self.t) - 1:
             temp = BTreeNode()
@@ -27,26 +27,32 @@ class BTree:
         else:
             self.insert_non_full(root, k)
 
-    # Insert nonfull(如果插入時空間沒滿，吃root還有tuple)
+    # Insert nonfull(如果插入時空間沒滿，吃root(x)還有tuple(k))
     def insert_non_full(self, x, k):
-        i = len(x.keys) - 1
+        i = len(x.keys) - 1  # 指向root的key中最後的index位置
         if x.leaf:
-            x.keys.append((None, None))
+            x.keys.append((None, None))  # 擴充空間
+            # 當i>=0(root有key)，且吃進來的tuple的第一個值 < root當前的keys中最後一個key的第一個值時:
             while i >= 0 and k[0] < x.keys[i][0]:
+                # 先把最後一位的key往後移到擴充空間去，接著一一去比較，把大的都往後移，直到比當前key的第一個值小就能插入
                 x.keys[i + 1] = x.keys[i]
                 i -= 1
-            x.keys[i + 1] = k
+            # 由於前面i先自行-1到前一位，因此要往前補一位並把當前的tuple做插入
+            x.keys[i + 1] = k   # 一開始(2,4)就會直接塞進來
         else:
+            # root不是leaf的話，i指針就一直往前移動
             while i >= 0 and k[0] < x.keys[i][0]:
                 i -= 1
-            i += 1
+            i += 1  # 指1格回來，當前插入的會比目前i的key要小
+            # 如果當前root的child滿了，就分割
             if len(x.child[i].keys) == (2 * self.t) - 1:
                 self.split_child(x, i)
                 if k[0] > x.keys[i][0]:
                     i += 1
+            # child沒滿，就把當前root的child作為新root去遞迴，直到遇見leaf node就會做插入
             self.insert_non_full(x.child[i], k)
 
-    # Split the child
+    # Split the child (傳入當前root以及index當前指向的大key之index)
     def split_child(self, x, i):
         t = self.t
         y = x.child[i]
@@ -108,14 +114,39 @@ def main():
 
     B.print_tree(B.root)
 
-    if B.search_key(40) is not None:
+    if B.search_key(8) is not None:
         print("\nFound")
     else:
         print("\nNot Found")
 
     print("print root's keys:")
     print(B.root.keys)
+    print("print keys of child[0] of root:")
+    print(B.root.child[0].keys)
+    print("print keys of child[1] of root:")
+    print(B.root.child[1].keys)
+    print("print keys of child[2] of root:")
+    print(B.root.child[2].keys)
 
 
 if __name__ == '__main__':
     main()
+
+
+"""
+Level  0   2:(2, 4) (5, 10) 
+Level  1   2:(0, 0) (1, 2) 
+Level  1   2:(3, 6) (4, 8) 
+Level  1   4:(6, 12) (7, 14) (8, 16) (9, 18) 
+
+Found
+
+print root's keys:
+[(2, 4), (5, 10)]
+print keys of child[0] of root:
+[(0, 0), (1, 2)]
+print keys of child[1] of root:
+[(3, 6), (4, 8)]
+print keys of child[2] of root:
+[(6, 12), (7, 14), (8, 16), (9, 18)]
+"""

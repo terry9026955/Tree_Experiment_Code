@@ -2,8 +2,8 @@ class SSNode:
     def __init__(self, radius, leaf=False, centroid=None):
         self.centroid = centroid      # turple
         self.radius = radius    # float
-        self.child = []         # SSNode
-        self.points = []        # (x, y)
+        self.child = []         # SSNode(對葉子節點來說，會是None)
+        self.points = []        # (x, y) ((對內部節點來說，會是None))
         self.leaf = leaf        # boolean
 
     def print_node_info(self):
@@ -17,9 +17,9 @@ class SSNode:
 class SSTree:
     def __init__(self, k, m, M):
         self.root = SSNode(True)
-        self.m = m
-        self.M = M
-        self.k = k
+        self.m = m  # min
+        self.M = M  # max
+        self.k = k  # each data entry's dimension
 
     # def insert(self, node):
     #     root = self.root

@@ -20,3 +20,9 @@ if (len(gg) == 3):
 
 print("after split...")
 print(x, y)
+
+ggg = [1, 2, 3]
+i = len(ggg) - 1
+ggg.append(None)
+ggg[i+1] = 87
+print("ggg: ", ggg)
