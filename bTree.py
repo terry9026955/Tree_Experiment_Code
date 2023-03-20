@@ -9,7 +9,7 @@ class BTreeNode:
 # Tree
 class BTree:
     # t表示minimum degree, 除root之外的node都至少要有t-1個keys, root通常含1個key.
-    # 所有nodes(含root)通常包含至多(2t-1)個keys
+    # 所有nodes(含root)通常包含至多(2*t-1)個keys
     def __init__(self, t):
         self.root = BTreeNode(True)
         self.t = t
@@ -21,7 +21,7 @@ class BTree:
         if len(root.keys) == (2 * self.t) - 1:
             temp = BTreeNode()
             self.root = temp
-            temp.child.insert(0, root)
+            temp.child.insert(0, root)  # 這邊insert是預設而不是這段的insert()
             self.split_child(temp, 0)
             self.insert_non_full(temp, k)
         else:
@@ -38,7 +38,7 @@ class BTree:
                 x.keys[i + 1] = x.keys[i]
                 i -= 1
             # 由於前面i先自行-1到前一位，因此要往前補一位並把當前的tuple做插入
-            x.keys[i + 1] = k   # 一開始(2,4)就會直接塞進來
+            x.keys[i + 1] = k   # 一開始(0, 0)就會直接塞進來
         else:
             # root不是leaf的話，i指針就一直往前移動
             while i >= 0 and k[0] < x.keys[i][0]:
@@ -61,7 +61,7 @@ class BTree:
         x.keys.insert(i, y.keys[t - 1])
         z.keys = y.keys[t: (2 * t) - 1]
         y.keys = y.keys[0: t - 1]
-        if not y.leaf:
+        if not y.leaf:  # y不是leaf:
             z.child = y.child[t: 2 * t]
             y.child = y.child[0: t - 1]
 
@@ -96,7 +96,7 @@ class BTree:
 def main():
     # 建立degree是3的BTree
     B = BTree(3)
-
+    # 從0插入到9
     for i in range(10):
         B.insert((i, 2 * i))
 
@@ -119,14 +119,14 @@ def main():
     else:
         print("\nNot Found")
 
-    print("print root's keys:")
-    print(B.root.keys)
-    print("print keys of child[0] of root:")
-    print(B.root.child[0].keys)
-    print("print keys of child[1] of root:")
-    print(B.root.child[1].keys)
-    print("print keys of child[2] of root:")
-    print(B.root.child[2].keys)
+    # print("print root's keys:")
+    # print(B.root.keys)
+    # print("print keys of child[0] of root:")
+    # print(B.root.child[0].keys)
+    # print("print keys of child[1] of root:")
+    # print(B.root.child[1].keys)
+    # print("print keys of child[2] of root:")
+    # print(B.root.child[2].keys)
 
 
 if __name__ == '__main__':
