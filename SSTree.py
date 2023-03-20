@@ -19,7 +19,7 @@ class SSNode:
     # 距離
     def distance(self, point1, point2):
         x = point1[0] - point2[0]
-        y = point1[1] - point2[0]
+        y = point1[1] - point2[1]
         dis = math.sqrt(x*x + y*y)
         return dis
 
