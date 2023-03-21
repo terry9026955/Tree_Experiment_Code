@@ -3,12 +3,13 @@ import math
 
 class SSNode:
     def __init__(self, radius, leaf=False, centroid=None):
-        self.centroid = centroid      # turple
-        self.radius = radius    # float
-        self.children = []         # SSNode(對葉子節點來說，會是None)
-        self.points = []        # (x, y) ((對內部節點來說，會是None))
-        self.leaf = leaf        # boolean
+        self.centroid = centroid        # turple
+        self.radius = radius            # float
+        self.children = []              # SSNode(對葉子節點來說，會是None)
+        self.points = []                # (x, y) ((對內部節點來說，會是None))
+        self.leaf = leaf                # boolean
 
+    # For testing purposes
     def print_node_info(self):
         pass
         print("radius: ", self.radius, ", ", "leaf: ",
@@ -16,7 +17,7 @@ class SSNode:
         # print("leaf: ", self.leaf)
         # print("centroid: ", self.centroid)
 
-    # 距離
+    # 距離 (文章說是SS-Tree的結構參數(待確認))
     def distance(self, point1, point2):
         x = point1[0] - point2[0]
         y = point1[1] - point2[1]
@@ -54,6 +55,16 @@ class SSTree:
                         return result
         # 如果當前節點沒有子節點可以包含目標，或葉子節點上沒有與目標匹配的點
         return None
+
+    # Search the closest tree leaf to a target point
+    def searchParentLeaf(self, node, target):
+        # 如果是leaf，則回傳
+        if node.leaf:
+            return node
+        # 否則，我們就正在遍歷一個內部節點，並需找到下一步要去的分支
+        else:
+            child = node.findClosestChild(target)   # 決定要去的分支
+            return self.earchParentLeaf(child, target)  # 遞迴遍歷我選擇的分支並返回結果
 
 
 def main():
