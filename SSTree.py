@@ -66,6 +66,15 @@ class SSTree:
             child = node.findClosestChild(target)   # 決定要去的分支
             return self.earchParentLeaf(child, target)  # 遞迴遍歷我選擇的分支並返回結果
 
+    # insert point
+    def insert(self, node, point):
+        # case1
+        if node.leaf:
+            pass
+        # case2
+        # case3
+        pass
+
 
 def main():
     s1 = SSNode(3, True, (8, 7))
