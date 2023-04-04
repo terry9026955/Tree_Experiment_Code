@@ -32,6 +32,12 @@ class SSNode:
     def intersectsPoint(self, point) -> bool:
         return self.distance(self.centroid, point) <= self.radius
 
+    def updateBoundingEnvelope():
+        pass
+
+    def findClosestChild():
+        pass
+
 
 class SSTree:
     def __init__(self, k, m, M):
@@ -84,12 +90,36 @@ class SSTree:
                 return None  # no more than M, we can return
         # Or if node isn't a leaf:
         else:
-            pass
+            # if it's a internal node, we need to call helper method find which branch to traverse
+            closetChild = node.findClosestChild()
+            # 遞迴遍歷樹並插入new point儲存操作結果，一旦分裂就是回傳那兩個node；否則，都是回傳null
+            (newChild1, newChild2) = self.insert(closetChild, point)
+            # 如果遞迴傳回null(意味closetChild沒有被分割)，則只需要更新現在的node的bounding envelope
+            if newChild1 == None:
+                node.updateBoundingEnvelope()
+                return None
+            # 意味closetChild已被分割成newChild1 & 2，需將他從子節點list中刪除
+            else:
+                node.children.remove(closetChild)
+                node.children.append(newChild1)
+                node.children.append(newChild2)
+                node.children.sort()
+                node.updateBoundingEnvelope()   # 對現在的node做update
+                if len(node.children) <= M:  # 如果在數量範圍內，表示回溯工作完成
+                    return None
+        # If it gets here, it means that the node needs to be split: create two new nodes and return them.
+        return node.split()
 
-        # case2
+    # 當我們到了root需要對其進行分割時，我們需更新樹的根。
+    # 必須在Tree class上執行，才能訪問樹的根
 
-        # case3
-        pass
+    # insert method for SSTree(split root)
+    # takes a point and doesn’t return anything
+    def insert(self, point):
+        (newChild1, newChild2) = self.insert(self.root, point)
+        if newChild1 != None:
+            self.root = SSNode(leaf=False, children=[
+                               newChild1, newChild2])  # 這樣寫不確定餒!
 
 
 def main():
