@@ -1,5 +1,9 @@
 import math
 
+# global variables
+m = 2
+M = 4
+
 
 class SSNode:
     def __init__(self, radius, leaf=False, centroid=None):
@@ -57,21 +61,33 @@ class SSTree:
         return None
 
     # Search the closest tree leaf to a target point
-    def searchParentLeaf(self, node, target):
+    def searchParentLeaf(self, node: SSNode, target):
         # 如果是leaf，則回傳
         if node.leaf:
             return node
         # 否則，我們就正在遍歷一個內部節點，並需找到下一步要去的分支
         else:
             child = node.findClosestChild(target)   # 決定要去的分支
-            return self.earchParentLeaf(child, target)  # 遞迴遍歷我選擇的分支並返回結果
+            return self.searchParentLeaf(child, target)  # 遞迴遍歷我選擇的分支並返回結果
 
     # insert point
-    def insert(self, node, point):
-        # case1
+    def insert(self, node: SSNode, point):
+        # Checks if node is a leaf:
         if node.leaf:
+            if point in node.points:    # if it already contains the argument among its points
+                return None
+            node.points.append(point)   # Otherwise, adds the point to the leaf
+            # recompute the centroid and radius for this leaf after adding the new point
+            node.updateBoundingEnvelope()
+            # After added a new point, we need to check whether this leaf now holds more than M points.
+            if len(node.points) <= M:
+                return None  # no more than M, we can return
+        # Or if node isn't a leaf:
+        else:
             pass
+
         # case2
+
         # case3
         pass
 
