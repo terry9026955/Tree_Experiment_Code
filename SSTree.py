@@ -82,6 +82,17 @@ class SSNode:
         # returns the closest one found
         return result
 
+    # 分割(不確定)
+    def split(self):
+        if self.leaf:
+            n = 3
+            newNode1 = SSNode(leaf=True, points=self.points[0:n-1])
+            newNode2 = SSNode(leaf=True, points=self.points[n:])
+        else:
+            newNode1 = SSNode(leaf=False, points=self.children[0:n-1])
+            newNode2 = SSNode(leaf=False, points=self.children[n:])
+        return (newNode1, newNode2)
+
     # It returns the index of the direction along which the children of a node have maximum variance.
     # 沿著X軸做切割...
     # def directionOfMaxVariance(self):
