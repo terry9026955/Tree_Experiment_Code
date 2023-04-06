@@ -3,6 +3,7 @@ import math
 # global variables
 m = 2
 M = 4
+k = 2
 
 
 class SSNode:
@@ -15,7 +16,6 @@ class SSNode:
 
     # For testing purposes
     def print_node_info(self):
-        pass
         print("radius: ", self.radius, ", ", "leaf: ",
               self.leaf, ", ", "centroid: ", self.centroid)
         # print("leaf: ", self.leaf)
@@ -32,11 +32,61 @@ class SSNode:
     def intersectsPoint(self, point) -> bool:
         return self.distance(self.centroid, point) <= self.radius
 
-    def updateBoundingEnvelope():
-        pass
+    def mean(self, list):
+        result = sum(list) / len(list)
+        return result
 
-    def findClosestChild():
-        pass
+    # 對node做update
+    def updateBoundingEnvelope(self):
+        # 取邊界中所有項目的中心點做平均
+        # 葉節點取point平均
+        if self.leaf:
+            xsum = 0
+            ysum = 0
+            for i in self.points:
+                xsum += i[0]
+                ysum += i[1]
+                self.centroid = (xsum/len(self.points), ysum/len(self.points))
+        # 內節點取子節點平均
+        else:
+            xsum = 0
+            ysum = 0
+            for i in self.children:
+                xsum += i[0]
+                ysum += i[1]
+                self.centroid = (xsum/len(self.points), ysum/len(self.points))
+
+        # 半徑
+        self.radius = max()
+
+    # 回傳分支節點
+    def findClosestChild(self, target):
+        # 確保呼叫這個func的是node，而非leaf!
+        # TODO: 呼叫前弄一個檢查機制
+
+        # 適當更新最小距離和要回傳的點
+        # 一個internal node至少有m個child，所以這些值至少會更新1次
+        minDistance = float('inf')    # inf: 正無窮
+        result = None
+        # 循環瀏覽所有子節點
+        for childNode in self.children:
+            if self.distance(childNode.centroid, target) < minDistance:
+                minDistance = self.distance(childNode.centroid, target)
+                result = childNode
+        # returns the closest one found
+        return result
+
+    # It returns the index of the direction along which the children of a node have maximum variance.
+    # 沿著X軸做切割...
+    # def directionOfMaxVariance(self):
+    #     maxVariance = 0
+    #     directionIndex = 0
+    #     centroids = self.getEntriesCentroids()
+    #     for i in k-1:
+    #         if self.varianceAlongDirection(centroids, i) > maxVariance:
+    #             maxVariance = self.varianceAlongDirection(centroids, i)
+    #             directionIndex = i
+    #     return directionIndex
 
 
 class SSTree:

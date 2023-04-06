@@ -22,3 +22,9 @@ print("after: ", c)
 c.append(2)
 c.sort()
 print("sorted: ", c)
+
+# remove variable test
+d = [1, 2, 3]
+tt = 1
+d.remove(tt)
+print("after remove variable: ", d)
