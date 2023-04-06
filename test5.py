@@ -22,16 +22,35 @@
 class Node:
     def __init__(self, centroid):
         self.centroid = centroid
+        self.point = []
+        self.child = []
 
 
 p1 = Node((1, 2))
 p2 = Node((3, 4))
 p3 = Node((5, 6))
 
-root = []
-root.append(p1)
-root.append(p2)
-root.append(p3)
+pp1 = Node((7, 8))
+pp2 = Node((9, 10))
 
-for i in root:
-    print(i.centroid)
+root = Node((0, 0))
+root.point.append(p1)
+root.point.append(p2)
+root.point.append(p3)
+
+root.child.append(pp1)
+root.child.append(pp2)
+
+
+def print_all(x):
+    for i in x.point:
+        print(i.centroid)
+
+    if len(x.child) > 0:
+        print("have child")
+        for i in x.child:
+            print_all(i)
+            print(i.centroid)
+
+
+print_all(root)

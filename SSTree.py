@@ -37,6 +37,7 @@ class SSNode:
         return result
 
     # 對node做update
+    # 幹這邊有點難寫
     def updateBoundingEnvelope(self):
         # 取邊界中所有項目的中心點做平均
         # 葉節點取point平均
@@ -57,7 +58,12 @@ class SSNode:
                 self.centroid = (xsum/len(self.points), ysum/len(self.points))
 
         # 半徑
-        self.radius = max()
+        temp_radius = 0
+        for i in self.children:
+            dis = self.distance(self.centroid, i.centroid)
+            if dis > temp_radius:
+                temp_radius = dis
+        self.radius = temp_radius
 
     # 回傳分支節點
     def findClosestChild(self, target):
