@@ -82,7 +82,7 @@ class SSNode:
         # returns the closest one found
         return result
 
-    # 分割(不確定)
+    # 分割(不確定，先假設所有點都已經對X軸做排序好了)
     def split(self):
         if self.leaf:
             n = 3
