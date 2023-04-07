@@ -18,6 +18,7 @@
 # for i in parent_points:
 #     print(i[0])
 
+# -----------------------------------------------------------------
 
 class Node:
     def __init__(self, centroid):

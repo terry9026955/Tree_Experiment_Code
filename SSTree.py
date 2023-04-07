@@ -1,13 +1,13 @@
 import math
 
 # global variables
-m = 2
 M = 4
-k = 2
+m = 2
+k = 2   # 維度
 
 
 class SSNode:
-    def __init__(self, radius, leaf=False, centroid=None):
+    def __init__(self, leaf=False, radius=None, centroid=None):
         self.centroid = centroid        # turple
         self.radius = radius            # float
         self.children = []              # SSNode(對葉子節點來說，會是None)
@@ -182,7 +182,7 @@ class SSTree:
 
     # insert method for SSTree(split root)
     # takes a point and doesn’t return anything
-    def insert(self, point):
+    def insert2(self, point):
         (newChild1, newChild2) = self.insert(self.root, point)
         if newChild1 != None:
             self.root = SSNode(leaf=False, children=[
@@ -190,8 +190,14 @@ class SSTree:
 
 
 def main():
-    s1 = SSNode(3, True, (8, 7))
+    s1 = SSNode(True, 3, (8, 7))
     s1.print_node_info()
+
+    ST = SSTree(2, 2, 4)
+    print(ST.root.leaf)
+    for i in range(10):
+        ST.insert(ST.root, (i, i*2))
+    # ST.insert(ST.root, (1, 2))
 
 
 if __name__ == '__main__':
