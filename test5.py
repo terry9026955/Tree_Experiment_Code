@@ -20,6 +20,9 @@
 
 # -----------------------------------------------------------------
 
+import math
+
+
 class Node:
     def __init__(self, centroid):
         self.centroid = centroid
@@ -59,3 +62,8 @@ def print_all(x):
 
 
 print_all(root)
+
+
+points = [1, 2, 3, 4, 5]
+split_len = math.floor(len(points)/2)
+print(split_len)

@@ -58,11 +58,21 @@ class SSNode:
                 self.centroid = (xsum/len(self.points), ysum/len(self.points))
 
         # 半徑
-        temp_radius = 0
-        for i in self.children:
-            dis = self.distance(self.centroid, i.centroid)
-            if dis > temp_radius:
-                temp_radius = dis
+        if self.leaf:
+            temp_radius = 0
+            for i in self.points:
+                pt_centroid = (i[0], i[1])  # points沒有centroid，所以要自己搞
+                dis = self.distance(self.centroid, pt_centroid)
+                if dis > temp_radius:
+                    temp_radius = dis
+                self.radius = temp_radius
+        else:
+            temp_radius = 0
+            for i in self.children:
+                pt_centroid = (i[0], i[1])
+                dis = self.distance(self.centroid, pt_centroid)
+                if dis > temp_radius:
+                    temp_radius = dis
         self.radius = temp_radius
 
     # 回傳分支節點
@@ -84,14 +94,46 @@ class SSNode:
 
     # 分割(不確定，先假設所有點都已經對X軸做排序好了)
     def split(self):
+        # if self.leaf:
+        #     n = 3
+        #     newNode1 = SSNode(leaf=True, points=self.points[0:n-1])
+        #     newNode2 = SSNode(leaf=True, points=self.points[n:])
+        # else:
+        #     newNode1 = SSNode(leaf=False, points=self.children[0:n-1])
+        #     newNode2 = SSNode(leaf=False, points=self.children[n:])
+        # return (newNode1, newNode2)
+
         if self.leaf:
-            n = 3
-            newNode1 = SSNode(leaf=True, points=self.points[0:n-1])
-            newNode2 = SSNode(leaf=True, points=self.points[n:])
+            # 如果是leaf node則分割成2個leaf node
+            newNode1 = SSNode(True, None, None)
+            newNode2 = SSNode(True, None, None)
+            split_len = math.floor(len(self.points)/2)
+            temp1 = self.points[0:split_len]
+            temp2 = self.points[split_len:]
+            for i in temp1:
+                newNode1.points.append(i)
+            for j in temp2:
+                newNode2.points.append(j)
+            print(newNode1.points)
+            print(newNode2.points)
+            newNode1.updateBoundingEnvelope()
+            newNode2.updateBoundingEnvelope()
+            return (newNode1, newNode2)
         else:
-            newNode1 = SSNode(leaf=False, points=self.children[0:n-1])
-            newNode2 = SSNode(leaf=False, points=self.children[n:])
-        return (newNode1, newNode2)
+            newNode1 = SSNode(False, None, None)
+            newNode2 = SSNode(False, None, None)
+            split_len = math.floor(len(self.points)/2)
+            temp1 = self.children[0:split_len]
+            temp2 = self.children[split_len:]
+            for i in temp1:
+                newNode1.children.append(i)
+            for j in temp2:
+                newNode2.children.append(j)
+            print(newNode1.children)
+            print(newNode2.children)
+            newNode1.updateBoundingEnvelope()
+            newNode2.updateBoundingEnvelope()
+            return (newNode1, newNode2)
 
     # It returns the index of the direction along which the children of a node have maximum variance.
     # 沿著X軸做切割...
@@ -186,7 +228,7 @@ class SSTree:
         (newChild1, newChild2) = self.insert(self.root, point)
         if newChild1 != None:
             self.root = SSNode(leaf=False, children=[
-                               newChild1, newChild2])  # 這樣寫不確定餒!
+                newChild1, newChild2])  # 這樣寫不確定餒!
 
 
 def main():
