@@ -3,7 +3,6 @@
     * build and print all node info
 * R-Tree
     * do this after SS completed 
-    * 幹還是不懂internal node怎麼插了沒反應
 * SS-Tree
-    * maybe function and logic are done
-    * now should check and print it all
+    * change method from insert build tree to split build tree
+    * from big circle to small circle(leaf node) and give them id and other info
