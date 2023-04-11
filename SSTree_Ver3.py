@@ -4,11 +4,11 @@ import random
 # random.randint(1,100)
 
 data_list = []
-for i in range(30):
+for i in range(1000):
     data_list.append((random.randint(1, 100), random.randint(1, 100)))
 
 data_list.sort()
-print(data_list)
+# print(data_list)
 
 threshold = 4
 
