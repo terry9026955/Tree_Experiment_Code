@@ -1,14 +1,16 @@
+# 接下來以B-tree來延伸成SS-tree
+
 import math
-# Create a node
 
 
 class SSNode:
     def __init__(self, leaf=False, radius=None, centroid=None):
         self.leaf = leaf
-        self.centroid = centroid
-        self.radius = radius
         self.keys = []
         self.child = []
+        # for MBC
+        self.centroid = centroid
+        self.radius = radius
 
     def distance(self, point1, point2):
         x = point1[0] - point2[0]

@@ -1,14 +1,16 @@
+# DFS遞迴方式分割地圖，每次分割會切成2個圓形的Maximum Bounding Envelope
+
 import math
 import random
 
 # random.randint(1,100)
 
 data_list = []
-for i in range(1000):
+for i in range(20):
     data_list.append((random.randint(1, 100), random.randint(1, 100)))
 
 data_list.sort()
-# print(data_list)
+print(data_list)
 
 threshold = 4
 
@@ -47,6 +49,9 @@ temp = []
 leaf = []
 centroid_list = []
 radius_list = []
+
+# 分區策略: 選擇兩子圓重疊的最小範圍來劃分
+# 1. 以最小重疊面積劃分 2. 以 兩圓半徑加總 - 兩圓中心直線距離之最小差來劃分
 
 
 def region(df: list):
