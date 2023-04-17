@@ -120,6 +120,22 @@ class SSTree:
             y.child = y.child[0: t - 1]
             z.updateBoundingEnvelope()
 
+    # 不rotate，直接生出空節點包他
+    def split_child(self, x, i):
+        t = self.t
+        y = x.child[i]
+        z = SSNode(y.leaf)
+        x.child.insert(i + 1, z)
+        x.keys.insert(i, y.keys[t - 1])
+        z.keys = y.keys[t: (2 * t) - 1]
+        y.keys = y.keys[0: t - 1]
+        z.updateBoundingEnvelope()
+
+        if not y.leaf:  # y不是leaf:
+            z.child = y.child[t: 2 * t]
+            y.child = y.child[0: t - 1]
+            z.updateBoundingEnvelope()
+
 
 # Print the tree(吃BTreeNode)
 

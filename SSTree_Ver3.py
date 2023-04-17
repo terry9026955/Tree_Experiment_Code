@@ -7,7 +7,10 @@ import random
 
 data_list = []
 for i in range(20):
-    data_list.append((random.randint(1, 100), random.randint(1, 100)))
+    data_list.append((random.randint(1, 20), random.randint(1, 20)))
+
+data_list = [(1, 4), (2, 4), (2, 7), (3, 15), (4, 4), (5, 2), (5, 8), (5, 18), (6, 5), (7, 11),
+             (7, 17), (9, 13), (11, 10), (12, 14), (14, 8), (15, 7), (18, 5), (18, 13), (20, 6), (20, 8)]
 
 data_list.sort()
 print(data_list)
@@ -38,6 +41,16 @@ def get_radius(centroid):
     return result
 
 
+def get_radius(centroid, df: list):
+    result = 0
+    temp = None
+    for i in df:
+        temp = distance(centroid, i)
+        if temp == None or temp > result:
+            result = temp
+    return result
+
+
 def distance(centroid, point):
     x = abs(centroid[0] - point[0])
     y = abs(centroid[1] - point[1])
@@ -53,32 +66,89 @@ radius_list = []
 # 分區策略: 選擇兩子圓重疊的最小範圍來劃分
 # 1. 以最小重疊面積劃分 2. 以 兩圓半徑加總 - 兩圓中心直線距離之最小差來劃分
 
+# 類KD-tree的分區策略
+
 
 def region(df: list):
     df1 = []
     df2 = []
     # temp = []
     region_id = 0
-    lenth = len(df)
+    lenth = len(df)  # 準備對半切
     if lenth > threshold:
-        df1 = df[0:int(lenth/2)]
+        df1 = df[0:int(lenth/2)]    #
         df2 = df[int(lenth/2):]
         temp.append(df1)
         temp.append(df2)
         region(df1)
         region(df2)
 
-        # print(region1, region2)
-        # temp[region_id] = df1
+        # print(df1, df2)  # 註解掉
+        # temp[region_id] = df1   # 註解掉
         # region_id += 1
-        # temp[region_id] = df2
+        # temp[region_id] = df2   # 註解掉
         # region_id += 1
     else:
-        temp.remove(df)
-        leaf.append(df)
+        temp.remove(df)   # 註執行
+        leaf.append(df)   # 註執行
         # region_id += 1
         return
     return region_id
+
+# 使用分區策略的分割
+
+
+def region2(df: list):
+    df1 = []
+    df2 = []
+    # temp = []
+    region_id = 0
+    split_index = findSplit(df)
+    if len(df) > threshold:
+        df1 = df[0:int(split_index)]    #
+        df2 = df[int(split_index):]
+        temp.append(df1)
+        temp.append(df2)
+        region2(df1)
+        region2(df2)
+
+        # print(df1, df2)  # 註解掉
+        # temp[region_id] = df1   # 註解掉
+        # region_id += 1
+        # temp[region_id] = df2   # 註解掉
+        # region_id += 1
+    else:
+        temp.remove(df)   # 註執行
+        leaf.append(df)   # 註執行
+        # region_id += 1
+        return
+    return region_id
+
+
+def findSplit(df: list):
+    df1 = []
+    df2 = []
+    split_index = 2  # 預設小m
+    tempArea = None  # 紀錄最小面積
+    splitArea = 8787    # 回傳最小面積
+    former = int(len(df) * 0.4)
+    lenth = int(len(df)) - 2
+    for i in range(former, lenth):
+        df1 = df[0:int(i)]    #
+        df2 = df[int(i):]
+        circle1_cen = get_centroid(df1)
+        circle2_cen = get_centroid(df2)
+        circle1_rad = get_radius(circle1_cen, df1)
+        circle2_rad = get_radius(circle2_cen, df2)
+
+        tempArea = (circle1_rad + circle2_rad) - \
+            distance(circle1_cen, circle2_cen)
+        # 紀錄重疊最小的時候
+        if tempArea < splitArea:
+            splitArea = tempArea
+            split_index = i
+
+    return split_index
 
 
 def save_centroid(leaf):
@@ -106,16 +176,18 @@ def print_all_leaf():
     idx = len(leaf)
     print("leaf_numbers: ", len(leaf))
     for i in range(idx):
-        print("id: ", i, ", items: ", leaf[i], ", centroid: ",
+        print("Leaf id: ", i, ", items: ", leaf[i], ", centroid: ",
               centroid_list[i], ", radius: ", radius_list[i])
 
 
 def main():
     centroid = get_centroid(data_list)
-    redius = get_radius(centroid)
+    redius = get_radius(centroid, data_list)
     print("centroid: ", centroid, "radius: ", redius)
 
-    id = region(data_list)
+    # id = region(data_list)
+    # print(findSplit(data_list))   # 測試split的index
+    id2 = region2(data_list)
     # print("internal: ", temp)
 
     # for i in leaf:
