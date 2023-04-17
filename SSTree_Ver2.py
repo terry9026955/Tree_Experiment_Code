@@ -139,6 +139,7 @@ class SSTree:
 
 # Print the tree(吃BTreeNode)
 
+# centroid & radius 從這下手!
 
     def print_tree(self, x, l=0):
         print("Level ", l, " ", len(x.keys), end=":")

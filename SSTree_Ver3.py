@@ -41,7 +41,7 @@ data_list = [(10, 12), (23, 3), (2, 28), (19, 23), (42, 8), (12, 47), (35, 34), 
 # data_list.sort()
 print(data_list)
 
-threshold = 5
+threshold = 4
 
 
 def get_centroid(data_list):
