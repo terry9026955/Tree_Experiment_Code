@@ -7,15 +7,18 @@ import random
 
 data_list = []
 for i in range(20):
-    data_list.append((random.randint(1, 20), random.randint(1, 20)))
+    data_list.append((random.randint(1, 100), random.randint(1, 100)))
 
-data_list = [(1, 4), (2, 4), (2, 7), (3, 15), (4, 4), (5, 2), (5, 8), (5, 18), (6, 5), (7, 11),
-             (7, 17), (9, 13), (11, 10), (12, 14), (14, 8), (15, 7), (18, 5), (18, 13), (20, 6), (20, 8)]
+# data_list = [(1, 4), (2, 4), (2, 7), (3, 15), (4, 4), (5, 2), (5, 8), (5, 18), (6, 5), (7, 11),
+#              (7, 17), (9, 13), (11, 10), (12, 14), (14, 8), (15, 7), (18, 5), (18, 13), (20, 6), (20, 8)]
+# 空間加大
+data_list = [(2, 28), (10, 12), (12, 47), (19, 23), (23, 3), (26, 96), (35, 34), (41, 100), (42, 8), (51, 59),
+             (54, 93), (61, 8), (68, 14), (73, 22), (73, 100), (80, 4), (81, 63), (81, 91), (82, 96), (83, 84)]
 
 data_list.sort()
 print(data_list)
 
-threshold = 4
+threshold = 6
 
 
 def get_centroid(data_list):
@@ -185,9 +188,11 @@ def main():
     redius = get_radius(centroid, data_list)
     print("centroid: ", centroid, "radius: ", redius)
 
-    # id = region(data_list)
+    # print("not using split method")
+    id = region(data_list)
     # print(findSplit(data_list))   # 測試split的index
-    id2 = region2(data_list)
+    # print("using split method")
+    # id2 = region2(data_list)
     # print("internal: ", temp)
 
     # for i in leaf:
