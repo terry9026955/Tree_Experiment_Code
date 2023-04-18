@@ -31,8 +31,9 @@ def get_centroid(data_list):
     return centroid
 
 
-datalist = [(54, 93), (83, 84), (81, 91), (73, 100), (82, 96)]
+datalist = [(10, 12), (23, 3), (2, 28), (19, 23), (42, 8),
+            (12, 47), (35, 34), (61, 8), (68, 14), (80, 4), (73, 22)]
 
 cen = get_centroid(datalist)
 rad = get_radius(cen, datalist)
-print("cen: ", cen, " rad: ", rad)
+print("cen: ", cen, " \nrad: ", rad)

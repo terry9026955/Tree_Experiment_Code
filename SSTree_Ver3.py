@@ -156,7 +156,7 @@ def region2(df: list):
         region2(df1)
         region2(df2)
 
-        # print("df1: ", df1, "df2: ", df2)  # 註解掉
+        print("df1: ", df1, "df2: ", df2)  # 紀錄分區
 
         # temp[region_id] = df1   # 註解掉
         # region_id += 1
